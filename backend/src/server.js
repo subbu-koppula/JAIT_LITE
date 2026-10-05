@@ -1,7 +1,10 @@
-require('dotenv').config(); // Loads environment variables from the .env file
-const express = require('express');
-const cors = require('cors');
-const connectDB = require('./config/db');
+import 'dotenv/config'; // Loads environment variables from the .env file
+import express from 'express';
+import cors from 'cors';
+import connectDB from './config/db.js'; // Note the .js extension in ES6 modules!
+import authRoutes from './routes/authRoutes.js';
+import projectRoutes from './routes/projectRoutes.js';
+import issueRoutes from './routes/issueRoutes.js';
 
 // 1. Connect to our Database
 connectDB();
@@ -13,7 +16,10 @@ const app = express();
 app.use(cors()); // Allows our frontend to make requests to this backend without CORS errors
 app.use(express.json()); // Parses incoming requests with JSON payloads (e.g., req.body)
 
-// 4. Setup Basic Routes
+// 4. Setup Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/projects', projectRoutes);
+app.use('/api/issues', issueRoutes);
 // A simple health check route to verify our API is up and running
 app.get('/api/health', (req, res) => {
   res.json({ 
