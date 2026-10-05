@@ -3,14 +3,16 @@ import {
   getProjects, 
   getProjectById, 
   createProject, 
+  updateProject,
   deleteProject, 
-  addMember 
+  addMember,
+  removeMember,
+  leaveProject
 } from '../controllers/projectController.js';
 import { protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
-// All project routes require authentication
 router.use(protect);
 
 router.route('/')
@@ -19,9 +21,16 @@ router.route('/')
 
 router.route('/:id')
   .get(getProjectById)
+  .patch(updateProject)
   .delete(deleteProject);
 
-// Route for inviting a member
-router.post('/:id/members', addMember);
+router.route('/:id/members')
+  .post(addMember);
+
+router.route('/:id/members/:userId')
+  .delete(removeMember);
+
+router.route('/:id/leave')
+  .post(leaveProject);
 
 export default router;

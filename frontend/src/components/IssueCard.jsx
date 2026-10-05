@@ -1,47 +1,56 @@
-import { Trash2 } from 'lucide-react';
-
-const IssueCard = ({ issue, onUpdate, onDelete }) => {
+const IssueCard = ({ issue, onClick, onStatusChange, canChangeStatus }) => {
   const priorityColors = {
     LOW: '#3b82f6',    // blue
     MEDIUM: '#f59e0b', // orange
     HIGH: '#ef4444'    // red
   };
 
-  return (
-    <div className="issue-card">
-      <div className="issue-card-header">
-        <h4>{issue.title}</h4>
-        <button className="btn-icon text-danger" onClick={() => onDelete(issue._id)} title="Delete Issue">
-          <Trash2 size={14} />
-        </button>
-      </div>
-      
-      {issue.description && <p className="issue-desc">{issue.description}</p>}
-      
-      <div className="issue-meta">
-        <span 
-          className="badge" 
-          style={{ backgroundColor: priorityColors[issue.priority], color: 'white' }}
-        >
-          {issue.priority}
-        </span>
-        
-        <span className="user-name" title="Creator">
-          By: {issue.creator?.name || 'Unknown'}
-        </span>
-      </div>
+  // Helper to get initials
+  const getInitials = (name) => {
+    if (!name) return '?';
+    return name.substring(0, 2).toUpperCase();
+  };
 
-      <div className="issue-actions">
-        <select 
-          value={issue.status} 
-          onChange={(e) => onUpdate(issue._id, { status: e.target.value })}
-          className="status-select"
-        >
-          <option value="OPEN">Open</option>
-          <option value="IN_PROGRESS">In Progress</option>
-          <option value="RESOLVED">Resolved</option>
-          <option value="CLOSED">Closed</option>
-        </select>
+  return (
+    <div className="issue-card" onClick={() => onClick(issue)}>
+      <div className="issue-card-title">{issue.title}</div>
+      <div className="issue-meta" style={{ marginTop: '0.75rem' }}>
+        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+          <span 
+            className="badge" 
+            style={{ backgroundColor: priorityColors[issue.priority], color: 'white' }}
+          >
+            {issue.priority}
+          </span>
+
+          {canChangeStatus && (
+            <select
+              className="card-status-select"
+              value={issue.status}
+              onClick={(e) => e.stopPropagation()} // Prevent opening modal
+              onChange={(e) => {
+                e.stopPropagation();
+                onStatusChange(issue._id, e.target.value);
+              }}
+            >
+              <option value="OPEN">Open</option>
+              <option value="IN_PROGRESS">In Prog</option>
+              <option value="RESOLVED">Resolved</option>
+              <option value="CLOSED">Closed</option>
+            </select>
+          )}
+        </div>
+        
+        <div style={{ display: 'flex', gap: '0.25rem' }}>
+          <div className="avatar-circle" title={`Author: ${issue.creator?.name}`}>
+            {getInitials(issue.creator?.name)}
+          </div>
+          {issue.assignee && (
+            <div className="avatar-circle" style={{ background: '#3b82f6' }} title={`Assignee: ${issue.assignee.name}`}>
+              {getInitials(issue.assignee.name)}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

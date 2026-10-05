@@ -21,7 +21,7 @@ const Navbar = () => {
       </div>
       <div className="navbar-menu">
         <span>Hello, {user.name}</span>
-        <button onClick={handleLogout} className="btn-logout" title="Logout">
+        <button onClick={handleLogout} className="btn-icon" title="Logout">
           <LogOut size={18} />
         </button>
       </div>

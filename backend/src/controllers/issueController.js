@@ -1,32 +1,21 @@
 import Issue from '../models/Issue.js';
 import Project from '../models/Project.js';
-
-// Helper function to check if user has access to a project
-const checkAccess = (project, userId) => {
-  return (
-    project.owner.toString() === userId || 
-    project.members.some((member) => member.toString() === userId)
-  );
-};
+import { getUserRole, isAdmin } from './projectController.js';
 
 // @desc    Get all issues for a specific project
 // @route   GET /api/issues/project/:projectId
 export const getIssues = async (req, res) => {
   try {
     const { projectId } = req.params;
-
     const project = await Project.findById(projectId);
     if (!project) return res.status(404).json({ message: 'Project not found' });
 
-    // Verify user is owner or member
-    if (!checkAccess(project, req.user.id)) {
-      return res.status(401).json({ message: 'Not authorized to view these issues' });
-    }
+    const role = getUserRole(project, req.user.id);
+    if (!role) return res.status(401).json({ message: 'Not authorized' });
 
     const issues = await Issue.find({ project: projectId })
       .populate('creator', 'name email')
       .populate('assignee', 'name email');
-
     res.json(issues);
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: error.message });
@@ -45,14 +34,18 @@ export const createIssue = async (req, res) => {
     const project = await Project.findById(projectId);
     if (!project) return res.status(404).json({ message: 'Project not found' });
 
-    // Verify user is owner or member
-    if (!checkAccess(project, req.user.id)) {
-      return res.status(401).json({ message: 'Not authorized to create issues in this project' });
+    const role = getUserRole(project, req.user.id);
+    if (!role || role === 'observer') {
+      return res.status(401).json({ message: 'Observers cannot create issues' });
     }
 
-    // Optional: If an assignee is provided, ensure they are part of the project
-    if (assignee && !checkAccess(project, assignee)) {
-      return res.status(400).json({ message: 'Assignee must be a project member or owner' });
+    // Only admins can assign issues to others during creation
+    if (assignee && !isAdmin(role)) {
+      return res.status(401).json({ message: 'Only admins can assign issues' });
+    }
+    
+    if (assignee && !getUserRole(project, assignee)) {
+      return res.status(400).json({ message: 'Assignee is not in this project' });
     }
 
     const issue = await Issue.create({
@@ -75,7 +68,7 @@ export const createIssue = async (req, res) => {
   }
 };
 
-// @desc    Update an issue (status, priority, assignee, etc)
+// @desc    Update an issue
 // @route   PATCH /api/issues/:id
 export const updateIssue = async (req, res) => {
   try {
@@ -83,15 +76,48 @@ export const updateIssue = async (req, res) => {
     if (!issue) return res.status(404).json({ message: 'Issue not found' });
 
     const project = await Project.findById(issue.project);
-
-    // Verify user is owner or member
-    if (!checkAccess(project, req.user.id)) {
-      return res.status(401).json({ message: 'Not authorized to update this issue' });
+    const role = getUserRole(project, req.user.id);
+    if (!role || role === 'observer') {
+      return res.status(401).json({ message: 'Observers cannot edit issues' });
     }
 
-    // Optional: If updating the assignee, ensure they belong to the project
-    if (req.body.assignee && !checkAccess(project, req.body.assignee)) {
-      return res.status(400).json({ message: 'Assignee must be a project member or owner' });
+    const { title, description, priority, status, assignee } = req.body;
+
+    // Editing title/desc/priority: Admin, Creator, or Assignee
+    const isCreator = issue.creator.toString() === req.user.id;
+    const isAssignee = issue.assignee && issue.assignee.toString() === req.user.id;
+    const canEditDetails = isAdmin(role) || isCreator || isAssignee;
+
+    if ((title !== undefined || description !== undefined || priority !== undefined) && !canEditDetails) {
+      return res.status(401).json({ message: 'Not authorized to edit issue details' });
+    }
+
+    // Assigning: Only admin
+    if (assignee !== undefined) {
+      const currentAssignee = issue.assignee ? issue.assignee.toString() : '';
+      const newAssignee = assignee === null ? '' : assignee;
+      
+      // If a non-admin tries to CHANGE the assignee, block it.
+      if (currentAssignee !== newAssignee && !isAdmin(role)) {
+        return res.status(401).json({ message: 'Only admins can change assignee' });
+      }
+      
+      if (newAssignee && !getUserRole(project, newAssignee)) {
+        return res.status(400).json({ message: 'Assignee is not in this project' });
+      }
+    }
+
+    // Changing status
+    if (status !== undefined) {
+      const isUnassigned = !issue.assignee;
+      const canChangeStatus = 
+        isAdmin(role) || 
+        (isUnassigned && role === 'member') || 
+        (isAssignee);
+        
+      if (!canChangeStatus) {
+        return res.status(401).json({ message: 'Not authorized to change status' });
+      }
     }
 
     const updatedIssue = await Issue.findByIdAndUpdate(
@@ -116,14 +142,14 @@ export const deleteIssue = async (req, res) => {
     if (!issue) return res.status(404).json({ message: 'Issue not found' });
 
     const project = await Project.findById(issue.project);
+    const role = getUserRole(project, req.user.id);
 
-    // Verify user is owner or member
-    if (!checkAccess(project, req.user.id)) {
-      return res.status(401).json({ message: 'Not authorized to delete this issue' });
+    if (!isAdmin(role)) {
+      return res.status(401).json({ message: 'Only admins can delete issues' });
     }
 
     await issue.deleteOne();
-    res.json({ id: req.params.id, message: 'Issue deleted successfully' });
+    res.json({ id: req.params.id, message: 'Issue deleted' });
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: error.message });
   }
