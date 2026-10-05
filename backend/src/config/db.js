@@ -6,6 +6,7 @@ const connectDB = async () => {
     // If process.env.MONGO_URI is missing or invalid, this will throw an error.
     const conn = await mongoose.connect(process.env.MONGO_URI);
     console.log(`MongoDB Connected: ${conn.connection.host}`);
+    console.log(`Database: ${conn.connection.name}`);
   } catch (error) {
     console.error(`MongoDB Connection Error: ${error.message}`);
     // If we can't connect to the database, the server shouldn't keep running.
