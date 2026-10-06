@@ -162,7 +162,7 @@ const ProjectPage = () => {
     setIsDetailModalOpen(true);
   };
 
-  if (loading) return <div style={{ padding: '2rem' }}>Loading project...</div>;
+  if (loading) return <div className="loading-state">Loading project...</div>;
   if (!project) return <div>Project not found</div>;
 
   return (

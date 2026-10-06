@@ -1,3 +1,6 @@
+/* =====================
+   CSS VARIABLES (Design Tokens)
+   ===================== */
 :root {
   --background: #09090b;
   --foreground: #fafafa;
@@ -16,6 +19,9 @@
   --radius: 0.5rem;
 }
 
+/* =====================
+   RESET & BASE
+   ===================== */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -39,25 +45,31 @@ a:hover {
   text-decoration: underline;
 }
 
-/* Layout */
+/* =====================
+   LAYOUT
+   ===================== */
 .app-container {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
+
 .main-content {
   flex: 1;
-  padding: 2rem;
+  padding: 1.5rem;
   max-width: 1400px;
   margin: 0 auto;
   width: 100%;
 }
 
-/* Navbar */
+/* =====================
+   NAVBAR
+   ===================== */
 .navbar {
-  background-color: rgba(9, 9, 11, 0.8);
+  background-color: rgba(9, 9, 11, 0.85);
   backdrop-filter: blur(8px);
-  padding: 1rem 2rem;
+  -webkit-backdrop-filter: blur(8px);
+  padding: 0.875rem 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -66,20 +78,25 @@ a:hover {
   top: 0;
   z-index: 40;
 }
+
 .navbar-brand a {
-  font-size: 1.25rem;
-  font-weight: 600;
-  letter-spacing: -0.025em;
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--foreground);
 }
+
 .navbar-menu {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.75rem;
   font-size: 0.875rem;
   color: var(--muted-foreground);
 }
 
-/* Auth */
+/* =====================
+   AUTH PAGES
+   ===================== */
 .auth-container {
   display: flex;
   align-items: center;
@@ -87,72 +104,105 @@ a:hover {
   min-height: 80vh;
   padding: 1rem;
 }
+
 .auth-card {
   background: var(--card);
-  padding: 2.5rem;
+  padding: 2rem;
   border-radius: var(--radius);
   border: 1px solid var(--border);
   width: 100%;
   max-width: 400px;
-  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.5);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
 }
+
 .auth-card h2 {
-  margin-bottom: 1.5rem;
-  text-align: center;
+  margin-bottom: 0.5rem;
   font-weight: 600;
+  font-size: 1.25rem;
   letter-spacing: -0.025em;
 }
 
-/* Forms */
-.form-group {
-  margin-bottom: 1.25rem;
+.auth-card > p {
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+  text-align: center;
+  margin-top: 1.25rem;
 }
+
+/* =====================
+   FORMS
+   ===================== */
+.form-group {
+  margin-bottom: 1rem;
+}
+
 .form-group label {
   display: block;
-  margin-bottom: 0.5rem;
-  font-size: 0.875rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.8rem;
   font-weight: 500;
+  color: var(--muted-foreground);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
-.form-group input, .form-group select, .form-group textarea {
+
+.form-group input,
+.form-group select,
+.form-group textarea {
   width: 100%;
-  padding: 0.5rem 0.75rem;
+  padding: 0.55rem 0.75rem;
   background-color: var(--background);
   border: 1px solid var(--border);
   border-radius: calc(var(--radius) - 2px);
   color: var(--foreground);
   font-size: 0.875rem;
-  transition: border-color 0.2s ease;
+  font-family: inherit;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  resize: vertical;
 }
-.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
   outline: none;
   border-color: var(--muted-foreground);
+  box-shadow: 0 0 0 2px rgba(161, 161, 170, 0.12);
 }
+
 .form-group select option {
   background-color: var(--card);
   color: var(--foreground);
 }
 
-/* Buttons */
+/* =====================
+   BUTTONS
+   ===================== */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
   padding: 0.5rem 1rem;
   border: 1px solid transparent;
   border-radius: calc(var(--radius) - 2px);
   font-size: 0.875rem;
   font-weight: 500;
+  font-family: inherit;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
+  white-space: nowrap;
 }
+
 .btn-primary {
   background-color: var(--primary);
   color: var(--primary-foreground);
+  border-color: var(--primary);
 }
 .btn-primary:hover {
-  background-color: #e5e5e5;
+  background-color: #e4e4e7;
+  border-color: #e4e4e7;
 }
+
 .btn-outline {
   background-color: transparent;
   border-color: var(--border);
@@ -160,51 +210,87 @@ a:hover {
 }
 .btn-outline:hover {
   background-color: var(--accent);
-  color: var(--accent-foreground);
 }
+
 .btn-ghost {
   background-color: transparent;
   color: var(--foreground);
+  border-color: transparent;
 }
 .btn-ghost:hover {
   background-color: var(--accent);
-  color: var(--accent-foreground);
 }
+
 .btn-danger {
   background-color: var(--destructive);
   color: var(--destructive-foreground);
+  border-color: var(--destructive);
 }
 .btn-danger:hover {
   background-color: #991b1b;
 }
+
 .btn-sm {
-  padding: 0.25rem 0.75rem;
+  padding: 0.3rem 0.7rem;
   font-size: 0.8rem;
 }
+
 .btn-icon {
   background: none;
   border: none;
   color: var(--muted-foreground);
   cursor: pointer;
-  padding: 0.25rem;
-  border-radius: 4px;
+  padding: 0.35rem;
+  border-radius: calc(var(--radius) - 2px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+  font-family: inherit;
+  font-size: 0.8rem;
 }
 .btn-icon:hover {
   background-color: var(--accent);
   color: var(--foreground);
 }
 
-/* Modals */
+/* Back arrow button */
+.btn-back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  min-width: 34px; /* prevent shrink on mobile */
+  border-radius: 50%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--foreground);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-decoration: none;
+}
+.btn-back:hover {
+  background: var(--accent);
+  text-decoration: none;
+}
+
+/* =====================
+   MODALS
+   ===================== */
 .modal-overlay {
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background-color: rgba(0, 0, 0, 0.8);
+  inset: 0; /* shorthand for top/right/bottom/left = 0 */
+  background-color: rgba(0, 0, 0, 0.75);
   backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 50;
+  padding: 1rem; /* So modal doesn't touch screen edges on mobile */
 }
+
 .modal-content {
   background: var(--card);
   border: 1px solid var(--border);
@@ -212,202 +298,321 @@ a:hover {
   border-radius: var(--radius);
   width: 100%;
   max-width: 500px;
-  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.5);
+  max-height: 90vh;        /* Prevent overflow on short screens */
+  overflow-y: auto;        /* Scroll inside the modal if content is too tall */
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
   animation: modal-in 0.2s ease-out;
 }
+
 @keyframes modal-in {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
+  from { opacity: 0; transform: scale(0.96) translateY(4px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0);   }
 }
+
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
 }
+
 .modal-header h2 {
-  font-size: 1.125rem;
+  font-size: 1rem;
   font-weight: 600;
 }
+
 .btn-close {
   background: transparent;
   border: none;
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   line-height: 1;
   cursor: pointer;
   color: var(--muted-foreground);
-  padding: 0.25rem;
+  padding: 0.3rem;
   border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s;
+  transition: all 0.15s;
 }
 .btn-close:hover {
   background: var(--accent);
   color: var(--foreground);
 }
 
-/* Dashboard & Projects */
-.dashboard-header, .project-header {
+/* =====================
+   DASHBOARD & PROJECT HEADER
+   ===================== */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.75rem;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.project-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;  /* wraps on very small screens */
+  gap: 0.75rem;
 }
+
 .project-title-area {
   display: flex;
   align-items: flex-start;
-  gap: 1rem;
+  gap: 0.75rem;
+  min-width: 0; /* lets the text truncate if needed */
 }
+
 .project-title-area h1 {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 600;
   letter-spacing: -0.025em;
+  /* Don't let a super long project name push buttons off screen */
+  word-break: break-word;
 }
+
 .project-actions {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.4rem;
+  flex-wrap: wrap;  /* action buttons wrap on tiny screens */
+  flex-shrink: 0;
 }
+
+/* =====================
+   DASHBOARD PROJECT CARDS
+   ===================== */
 .project-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
 }
+
 .project-card {
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 1.5rem;
+  padding: 1.25rem;
   display: flex;
   flex-direction: column;
-  transition: border-color 0.2s;
+  color: inherit;
+  transition: border-color 0.15s, box-shadow 0.15s;
 }
 .project-card:hover {
   border-color: var(--muted-foreground);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
   text-decoration: none;
 }
+
 .project-card h3 {
-  font-size: 1.125rem;
-  margin-bottom: 0.5rem;
-  font-weight: 500;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
 }
-.project-card p {
+
+.project-card > p {
   color: var(--muted-foreground);
-  font-size: 0.875rem;
-  margin-bottom: 1.5rem;
+  font-size: 0.825rem;
+  line-height: 1.5;
+  margin-bottom: 1.25rem;
   flex: 1;
 }
 
-/* Kanban Board */
+.project-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 0.875rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+}
+
+/* =====================
+   EMPTY / LOADING STATES
+   ===================== */
+.empty-state {
+  text-align: center;
+  padding: 4rem 1rem;
+  color: var(--muted-foreground);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+}
+
+.loading-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40vh;
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+}
+
+/* =====================
+   KANBAN BOARD
+   Mobile-first: scrollable row on narrow screens,
+   fills height and no horizontal overflow on desktop.
+   ===================== */
 .kanban-board {
   display: flex;
-  gap: 1rem;
-  overflow-x: hidden;
-  height: calc(100vh - 220px); /* Fill rest of screen */
+  gap: 0.875rem;
   padding-bottom: 1rem;
+
+  /* Mobile: allow horizontal scroll so all 4 columns are reachable */
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+
+  /* Nice thin custom scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
 }
+.kanban-board::-webkit-scrollbar {
+  height: 6px;
+}
+.kanban-board::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
 .kanban-column {
-  flex: 1;
-  min-width: 250px;
+  /* On mobile each column is a fixed 280px so you can scroll between them */
+  flex: 0 0 280px;
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   display: flex;
   flex-direction: column;
-  overflow: hidden; /* Hide scrollbar for the column wrapper */
+  /* Column height = viewport minus navbar (~60px), main padding (~48px), header (~100px) */
+  max-height: calc(100vh - 210px);
+  min-height: 200px;
+  overflow: hidden;
 }
+
 .kanban-column-title {
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   font-weight: 600;
   color: var(--muted-foreground);
-  padding: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.875rem 1rem;
   border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-shrink: 0;
 }
+
 .count-badge {
   background: var(--secondary);
   color: var(--secondary-foreground);
-  padding: 0.1rem 0.5rem;
+  padding: 0.1rem 0.45rem;
   border-radius: 999px;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
 }
+
 .kanban-issues {
-  padding: 1rem;
+  padding: 0.75rem;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  overflow-y: auto; /* Let issues scroll vertically */
+  gap: 0.625rem;
+  overflow-y: auto;       /* Scroll within column */
   flex: 1;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
 }
 .kanban-issues::-webkit-scrollbar {
-  width: 6px;
+  width: 4px;
 }
 .kanban-issues::-webkit-scrollbar-thumb {
   background: var(--border);
   border-radius: 4px;
 }
 
-/* Small Issue Card (Trello Style) */
+/* =====================
+   ISSUE CARD (Trello style)
+   ===================== */
 .issue-card {
   background: var(--background);
   border: 1px solid var(--border);
   border-radius: calc(var(--radius) - 2px);
-  padding: 0.75rem;
+  padding: 0.7rem 0.75rem;
   cursor: pointer;
-  transition: border-color 0.2s;
+  transition: border-color 0.15s, box-shadow 0.15s;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 .issue-card:hover {
-  border-color: var(--muted-foreground);
+  border-color: #3f3f46;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
+
 .issue-card-title {
-  font-size: 0.875rem;
+  font-size: 0.85rem;
   font-weight: 500;
-  line-height: 1.3;
+  line-height: 1.35;
+  color: var(--foreground);
 }
+
 .issue-meta {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 0.25rem;
 }
+
+/* =====================
+   BADGES & AVATARS
+   ===================== */
 .badge {
-  padding: 0.1rem 0.4rem;
+  padding: 0.1rem 0.45rem;
   border-radius: 4px;
-  font-size: 0.7rem;
-  font-weight: 600;
+  font-size: 0.65rem;
+  font-weight: 700;
   text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
+
 .avatar-circle {
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   background: var(--secondary);
   color: var(--secondary-foreground);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.7rem;
-  font-weight: 600;
+  font-size: 0.65rem;
+  font-weight: 700;
+  flex-shrink: 0;
 }
+
+/* =====================
+   UTILITY
+   ===================== */
 .text-muted {
   color: var(--muted-foreground);
 }
 
+/* =====================
+   CARD STATUS SELECT (quick status change on card)
+   ===================== */
 .card-status-select {
   background: transparent;
   color: var(--muted-foreground);
   border: 1px solid var(--border);
   border-radius: 4px;
-  font-size: 0.75rem;
-  padding: 0.1rem 0.2rem;
+  font-size: 0.7rem;
+  padding: 0.1rem 0.25rem;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.15s;
   outline: none;
+  font-family: inherit;
 }
 .card-status-select:hover {
   color: var(--foreground);
@@ -416,4 +621,43 @@ a:hover {
 .card-status-select option {
   background: var(--card);
   color: var(--foreground);
+}
+
+/* =====================
+   RESPONSIVE ADJUSTMENTS
+   ===================== */
+
+/* Slightly reduce padding on small phones */
+@media (max-width: 480px) {
+  .main-content {
+    padding: 1rem;
+  }
+
+  .project-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .project-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .auth-card {
+    padding: 1.5rem;
+  }
+}
+
+/* On desktop (768px+), make kanban fill the screen width cleanly */
+@media (min-width: 768px) {
+  .kanban-board {
+    overflow-x: hidden; /* No horizontal scrollbar on desktop */
+    height: calc(100vh - 210px);
+  }
+
+  .kanban-column {
+    flex: 1; /* Equal-width columns that fill the row */
+    min-width: 0;
+    max-height: 100%; /* Column inherits the board height */
+  }
 }

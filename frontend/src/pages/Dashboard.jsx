@@ -45,7 +45,7 @@ const Dashboard = () => {
     }
   };
 
-  if (loading) return <div>Loading projects...</div>;
+  if (loading) return <div className="loading-state">Loading projects...</div>;
 
   return (
     <div>
@@ -58,7 +58,7 @@ const Dashboard = () => {
 
       {projects.length === 0 ? (
         <div className="empty-state">
-          <p>You don't have any projects yet.</p>
+          <p>No projects yet. Create your first one!</p>
         </div>
       ) : (
         <div className="project-grid">
@@ -103,7 +103,6 @@ const Dashboard = () => {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="What is this project about?"
-              style={{ width: '100%', padding: '0.75rem', borderColor: 'var(--border-color)', borderRadius: '4px' }}
             />
           </div>
           <button type="submit" className="btn btn-primary">Create</button>
