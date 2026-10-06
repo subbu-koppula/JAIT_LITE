@@ -24,42 +24,42 @@ const GuestRoute = ({ children }) => {
 
 const App = () => {
   return (
-    <Router>
+    <Router basename="/JAIT_LITE">
       <div className="app-container">
         <Navbar />
         <main className="main-content">
           <Routes>
-            <Route 
-              path="/login" 
+            <Route
+              path="/login"
               element={
                 <GuestRoute>
                   <LoginPage />
                 </GuestRoute>
-              } 
+              }
             />
-            <Route 
-              path="/register" 
+            <Route
+              path="/register"
               element={
                 <GuestRoute>
                   <RegisterPage />
                 </GuestRoute>
-              } 
+              }
             />
-            <Route 
-              path="/" 
+            <Route
+              path="/"
               element={
                 <PrivateRoute>
                   <Dashboard />
                 </PrivateRoute>
-              } 
+              }
             />
-            <Route 
-              path="/projects/:id" 
+            <Route
+              path="/projects/:id"
               element={
                 <PrivateRoute>
                   <ProjectPage />
                 </PrivateRoute>
-              } 
+              }
             />
           </Routes>
         </main>
