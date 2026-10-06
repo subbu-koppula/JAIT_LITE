@@ -13,7 +13,11 @@ connectDB();
 const app = express();
 
 // 3. Setup Middleware
-app.use(cors()); // Allows our frontend to make requests to this backend without CORS errors
+// Secure CORS by only allowing requests from our specific frontend URL
+app.use(cors({
+  origin: process.env.CLIENT_URL,
+  credentials: true
+}));
 app.use(express.json()); // Parses incoming requests with JSON payloads (e.g., req.body)
 
 // 4. Setup Routes
